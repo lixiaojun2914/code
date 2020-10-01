@@ -3,6 +3,7 @@ import operator
 import matplotlib.pyplot as plt
 import pickle
 
+# 根据属性，判断是否是鱼类
 dataSet = [
     [1, 1, 'yes'],
     [1, 1, 'yes'],
@@ -12,6 +13,7 @@ dataSet = [
 ]
 labels = ['no surfacing', 'flippers']
 
+# 计算香农熵
 def calcShannonEnt(dataSet):
     numEntries = len(dataSet)
     labelCounts = {}
@@ -24,6 +26,7 @@ def calcShannonEnt(dataSet):
             shannoEnt -= prob * log(prob, 2)
     return shannoEnt
 
+# 划分数据集
 def splitDataSet(dataSet, axis, value):
     retDataSet = []
     for featVec in dataSet:
@@ -33,6 +36,7 @@ def splitDataSet(dataSet, axis, value):
             retDataSet.append(reducedFeatVec)
     return retDataSet
 
+# 根据香农熵找到最佳划分点
 def chooseBeatFeatureToSplit(dataSet):
     numFeatures = len(dataSet[0]) - 1
     baseEntropy = calcShannonEnt(dataSet)
@@ -52,6 +56,7 @@ def chooseBeatFeatureToSplit(dataSet):
             bestFeature = i
     return bestFeature
 
+# 选择所有类中出现频率最高的，作为返回
 def majorityCnt(classList):
     classCount = {}
     for vote in classList:
