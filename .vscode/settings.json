@@ -1,6 +1,0 @@
-{
-    "python.pythonPath": "venv/bin/python",
-    "editor.fontSize": 16,
-    // "http.proxy": "http://127.0.0.1:7890"，
-    "python.linting.enabled": false
-}
