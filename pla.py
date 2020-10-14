@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
 
 ## 分离超平面
 ## y = 3x-2
@@ -37,3 +38,4 @@ plt.scatter(x2[:,0], x2[:,1], c='blue')
 xx = np.linspace(0, 10, 100)
 yy = 3*xx-2
 plt.plot(xx, yy)
+plt.show()
