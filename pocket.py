@@ -25,9 +25,10 @@ for i in range(1200):
         y.append(-1)
 
 ## 加入噪声
+zz = 3
 for i in range(1200):
-    # lam = 5 * np.random.rand() - 5
-    # x[i][0] += lam
+    lam = zz * np.random.rand() - zz
+    x[i][0] += lam
     if x[i][1] > (3*x[i][0]-2):
         x1.append(x[i])
     else:
@@ -47,16 +48,24 @@ lr = 0.0001
 w = np.random.randn(D_in, D_out)
 b = 0.0
 
+w_best = w
+b_best = b
 for i in range(1000):
     y_ = np.sign(np.matmul(x_train, w) + b)
+    y_best = np.sign(np.matmul(x_train, w_best) + b_best)
     for i in range(N):
-        if y_[i][0] != y_train[i]:
-            w += lr * y_train[i] * np.array([x_train[i]]).T
-            b += lr * y_train[i]
+            if y_[i][0] != y_train[i]:
+                w += lr * y_train[i] * np.array([x_train[i]]).T
+                b += lr * y_train[i]
+    
     loss = np.sum(y_train!=y_.flatten())
+    loss_best = np.sum(y_train!=y_best.flatten())
+    if(loss<loss_best):
+        w_best = w
+        b_best = b
     print(loss)
 
-test = np.sign(np.matmul(x_test, w) + b)
+test = np.sign(np.matmul(x_test, w_best) + b_best)
 acc = np.sum(test.flatten()==y_test) / len(test)
 print("----------------------------------------")
 print("acc: ", acc*100, "%")
@@ -72,7 +81,7 @@ plt.plot(xx, yy)
 
 r1 = []
 r2 = []
-res = np.sign(np.matmul(x_test, w) + b)
+res = np.sign(np.matmul(x_test, w_best) + b_best)
 for i in range(200):
     if res[i][0] == 1:
         r1.append(x_test[i])
