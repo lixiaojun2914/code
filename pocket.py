@@ -78,12 +78,9 @@ for epoch in range(epochs):
         print("epoch: ", epoch)
         w_draw.append(w_best.copy())
         print("----------------------------------------")
-        print("Loss: ", loss, ", Acc: ", acc, "%\n\n")
-
+        print("Loss: ", loss, ", Acc: ", acc, "%")
+        print("line: y = ", -w_best[0]/w_best[1], "* x + ", -w_best[2]/w_best[1], "\n\n")
 w = w_best.copy()
-
-print("----------------------------------------")
-print("acc: ", acc, "%")
 
 ## 绘图
 xx = np.linspace(0, 10, 100)
