@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import animation
 
 ## 数据生成
 ## 分离超平面
@@ -20,7 +21,7 @@ x = 10 * np.random.rand(N+200, D_in-1)
 ## 添加一列1，将b并入矩阵
 x = np.insert(x, D_in-1, 1, axis=1)
 
-# 将正负分开，方便绘图
+# 将坐标分类
 y = []
 for i in range(1200):
     if x[i][1] > (3*x[i][0]-2):
@@ -46,6 +47,9 @@ y_test = y[N:]
 lr = 0.0001
 w = np.random.randn(D_in, D_out)
 
+## 绘图历史信息
+w_draw = []
+
 ## 深拷贝
 w_best = w.copy()
 for epoch in range(1000):
@@ -61,6 +65,7 @@ for epoch in range(1000):
         w_best = w.copy()
     if epoch % 100 == 0:
         print(loss)
+        w_draw.append(w_best.copy())
 w = w_best.copy()
 
 test = np.sign(np.matmul(x_test, w))
@@ -95,19 +100,32 @@ for i in range(200):
 r1 = np.array(r1)
 r2 = np.array(r2)
 
-plt.figure(figsize=(13, 6))
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 6))
+
 ## 训练集绘制
-plt.subplot(1, 2, 1)
-plt.axis([0, 10, 0, 10])
-plt.scatter(x1[:,0], x1[:,1], c='red')
-plt.scatter(x2[:,0], x2[:,1], c='blue')
-plt.plot(xx, yy, 'g-', lw=2)
+def init():
+    line = ax1.plot(xx, -(w_draw[0][0]*xx+w_draw[0][2])/w_draw[0][1], lw=2)
+    ax1.scatter(x1[:,0], x1[:,1], c='red')
+    ax1.scatter(x2[:,0], x2[:,1], c='blue')
+    return line
+
+def animate(i):
+    line = ax1.plot(xx, -(w_draw[i][0]*xx+w_draw[i][2])/w_draw[i][1], lw=2)   
+    ax1.scatter(x1[:,0], x1[:,1], c='red')
+    ax1.scatter(x2[:,0], x2[:,1], c='blue')
+    return line
+
+ax1.set_xlim(0, 10)
+ax1.set_ylim(0, 10)
+ani = animation.FuncAnimation(fig=fig, func=animate, \
+    frames=len(w_draw), init_func=init, interval=500, \
+        blit=True, repeat=False)
 
 ## 测试集绘制
-plt.subplot(1, 2, 2)
-plt.axis([0, 10, 0, 10])
-plt.scatter(r1[:,0], r1[:,1], c='red')
-plt.scatter(r2[:,0], r2[:,1], c='blue')
-plt.plot(xx, yy, 'g-', lw=2)
+ax2.set_xlim(0, 10)
+ax2.set_ylim(0, 10)
+ax2.scatter(r1[:,0], r1[:,1], c='red')
+ax2.scatter(r2[:,0], r2[:,1], c='blue')
+ax2.plot(xx, yy, 'g-', lw=2)
 
 plt.show()
