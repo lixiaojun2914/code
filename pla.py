@@ -62,16 +62,14 @@ for epoch in range(epochs):
     loss = np.sum(y_train!=y_.flatten())
     loss_draw.append(loss)
 
-    if epoch % 100 == 0:
-        print(loss)
-        w_draw.append(w.copy())
-    
     test = np.sign(np.matmul(x_test, w))
     acc = np.sum(test.flatten()==y_test) / len(test) * 100
     acc_draw.append(acc)
-
-print("----------------------------------------")
-print("acc: ", acc, "%")
+    if epoch % 100 == 0 or epoch+1==epochs:
+        print("epoch: ", epoch)
+        w_draw.append(w.copy())
+        print("----------------------------------------")
+        print("Loss: ", loss, ", Acc: ", acc, "%\n\n")
 
 ## 绘图
 xx = np.linspace(0, 10, 100)

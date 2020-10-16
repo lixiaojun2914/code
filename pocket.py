@@ -69,13 +69,17 @@ for epoch in range(epochs):
         loss_draw.append(loss)
     else:
         loss_draw.append(loss_best)
-    if epoch % 100 == 0:
-        print(loss)
-        w_draw.append(w_best.copy())
     
     test = np.sign(np.matmul(x_test, w_best))
     acc = np.sum(test.flatten()==y_test) / len(test) * 100
     acc_draw.append(acc)
+
+    if epoch % 100 == 0 or epoch+1==epochs:
+        print("epoch: ", epoch)
+        w_draw.append(w_best.copy())
+        print("----------------------------------------")
+        print("Loss: ", loss, ", Acc: ", acc, "%\n\n")
+
 w = w_best.copy()
 
 print("----------------------------------------")
