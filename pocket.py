@@ -13,6 +13,7 @@ from matplotlib import animation
 # D_out: 输出维度
 
 N, D_in, D_out = 1000, 3, 1
+epochs = 1000
 
 ## 随机生成数据
 np.random.seed(6)
@@ -49,10 +50,12 @@ w = np.random.randn(D_in, D_out)
 
 ## 绘图历史信息
 w_draw = []
+loss_draw = []
+acc_draw = []
 
 ## 深拷贝
 w_best = w.copy()
-for epoch in range(1000):
+for epoch in range(epochs):
     y_ = np.sign(np.matmul(x_train, w))
     y_best = np.sign(np.matmul(x_train, w_best))
     for i in range(N):
@@ -63,16 +66,20 @@ for epoch in range(1000):
     loss_best = np.sum(y_train!=y_best.flatten())
     if(loss<loss_best):
         w_best = w.copy()
+        loss_draw.append(loss)
+    else:
+        loss_draw.append(loss_best)
     if epoch % 100 == 0:
         print(loss)
         w_draw.append(w_best.copy())
+    
+    test = np.sign(np.matmul(x_test, w_best))
+    acc = np.sum(test.flatten()==y_test) / len(test) * 100
+    acc_draw.append(acc)
 w = w_best.copy()
 
-test = np.sign(np.matmul(x_test, w))
-acc = np.sum(test.flatten()==y_test) / len(test)
 print("----------------------------------------")
-print("acc: ", acc*100, "%")
-
+print("acc: ", acc, "%")
 
 ## 绘图
 xx = np.linspace(0, 10, 100)
@@ -100,7 +107,7 @@ for i in range(200):
 r1 = np.array(r1)
 r2 = np.array(r2)
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 6))
+fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(10, 10))
 
 ## 训练集绘制
 def init():
@@ -115,6 +122,7 @@ def animate(i):
     ax1.scatter(x2[:,0], x2[:,1], c='blue')
     return line
 
+ax1.set_title("train set")
 ax1.set_xlim(0, 10)
 ax1.set_ylim(0, 10)
 ani = animation.FuncAnimation(fig=fig, func=animate, \
@@ -122,10 +130,20 @@ ani = animation.FuncAnimation(fig=fig, func=animate, \
         blit=True, repeat=False)
 
 ## 测试集绘制
+ax2.set_title("test set")
 ax2.set_xlim(0, 10)
 ax2.set_ylim(0, 10)
 ax2.scatter(r1[:,0], r1[:,1], c='red')
 ax2.scatter(r2[:,0], r2[:,1], c='blue')
 ax2.plot(xx, yy, 'g-', lw=2)
+
+lax = np.linspace(0, epochs, 1000)
+## Loss曲线绘制
+ax3.set_title("Loss")
+ax3.plot(lax, loss_draw)
+
+## acc曲线绘制
+ax4.set_title("Acc")
+ax4.plot(lax, acc_draw)
 
 plt.show()
