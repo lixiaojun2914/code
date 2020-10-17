@@ -64,7 +64,7 @@ for epoch in range(epochs):
 
     loss = np.sum(y_train != y_.flatten())
     loss_best = np.sum(y_train != y_best.flatten())
-    if (loss < loss_best):
+    if loss < loss_best:
         w_best = w.copy()
         loss_draw.append(loss)
     else:
@@ -108,7 +108,7 @@ for i in range(200):
 r1 = np.array(r1)
 r2 = np.array(r2)
 
-fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(10, 10))
+fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(8, 8))
 
 
 # 训练集绘制
@@ -129,8 +129,8 @@ def animate(i):
 ax1.set_title("train set")
 ax1.set_xlim(0, 10)
 ax1.set_ylim(0, 10)
-ani = animation.FuncAnimation(fig=fig, func=animate, \
-                              frames=len(w_draw), init_func=init, interval=500, \
+ani = animation.FuncAnimation(fig=fig, func=animate,
+                              frames=len(w_draw), init_func=init, interval=500,
                               blit=True, repeat=False)
 
 # 测试集绘制
