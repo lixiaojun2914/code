@@ -13,6 +13,7 @@ dataSet = [
 ]
 labels = ['no surfacing', 'flippers']
 
+
 # 计算香农熵
 def calcShannonEnt(dataSet):
     numEntries = len(dataSet)
@@ -26,15 +27,17 @@ def calcShannonEnt(dataSet):
             shannoEnt -= prob * log(prob, 2)
     return shannoEnt
 
+
 # 划分数据集
 def splitDataSet(dataSet, axis, value):
     retDataSet = []
     for featVec in dataSet:
         if featVec[axis] == value:
             reducedFeatVec = featVec[:axis]
-            reducedFeatVec.extend(featVec[axis+1:])
+            reducedFeatVec.extend(featVec[axis + 1:])
             retDataSet.append(reducedFeatVec)
     return retDataSet
+
 
 # 根据香农熵找到最佳划分点
 def chooseBeatFeatureToSplit(dataSet):
@@ -51,10 +54,11 @@ def chooseBeatFeatureToSplit(dataSet):
             prob = len(subDataSet) / float(len(dataSet))
             newEntropy += prob * calcShannonEnt(subDataSet)
         infoGain = baseEntropy - newEntropy
-        if(infoGain > bestInfoGain):
+        if (infoGain > bestInfoGain):
             bestInfoGain = infoGain
             bestFeature = i
     return bestFeature
+
 
 # 选择所有类中出现频率最高的，作为返回
 def majorityCnt(classList):
@@ -64,6 +68,7 @@ def majorityCnt(classList):
     sortedClassCount = sorted(classCount.items(), key=operator.itemgetter(1), reverse=True)
     return sortedClassCount[0][0]
 
+
 def createTree(dataSet, labels):
     classList = [example[-1] for example in dataSet]
     if classList.count(classList[0]) == len(classList):
@@ -72,8 +77,8 @@ def createTree(dataSet, labels):
         return majorityCnt(classList)
     bestFeat = chooseBeatFeatureToSplit(dataSet)
     bestFeatLabel = labels[bestFeat]
-    myTree = {bestFeatLabel:{}}
-    del(labels[bestFeat])
+    myTree = {bestFeatLabel: {}}
+    del (labels[bestFeat])
     featValues = [example[bestFeat] for example in dataSet]
     uniqueVals = set(featValues)
     for value in uniqueVals:
@@ -81,7 +86,8 @@ def createTree(dataSet, labels):
         myTree[bestFeatLabel][value] = createTree(splitDataSet(dataSet, bestFeat, value), subLabels)
     return myTree
 
-#序列化存储
+
+# 序列化存储
 result = createTree(dataSet, labels)
 fw = open('test.txt', 'wb')
 pickle.dump(result, fw)
