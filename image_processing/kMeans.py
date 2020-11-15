@@ -46,14 +46,17 @@ def result(dataSet, k):
         for j in range(n):
             # ans[i, j] = myCentroids[int(clusterAssing[i, j, 0])]
             if clusterAssing[i, j, 0] == 0:
-                ans[i, j] = 0
-            else:
                 ans[i, j] = 255
+            elif clusterAssing[i, j, 0] == 1:
+                ans[i, j] = 125
+            else:
+                ans[i, j] = 0
     return ans
 
 
-ans = result(img, 2)
-cv2.imshow("img", img/255)
+ans = result(img, 3)
+cv2.imshow("image", image)
+cv2.imshow("gray", img/255)
 cv2.imshow("ans", ans/255)
 
 key = cv2.waitKey()
