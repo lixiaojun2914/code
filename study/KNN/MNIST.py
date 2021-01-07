@@ -59,3 +59,12 @@ y_test_pred = KNN.kNN_classify(5, 'M', X_train, y_train, X_test)
 num_correct = np.sum(y_test_pred == y_test)
 accuracy = float(num_correct) / num_test
 print('Got %d / %d correct => accuracy: %f' % (num_correct, num_test, accuracy))
+
+# fig = plt.figure()
+# plt.subplot(121)
+# plt.imshow(test_loader.dataset.data.numpy()[0], cmap=plt.cm.binary)
+# cdata = centralized(test_loader.dataset.data.numpy(), mean_image)
+# cdata = cdata.reshape(cdata.shape[0], 28, 28)
+# plt.subplot(122)
+# plt.imshow(cdata[0], cmap=plt.cm.binary)
+print(test_loader.dataset.targets[0])
