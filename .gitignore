@@ -1,0 +1,12 @@
+/.vscode/
+/venv/
+/.ipynb_checkpoints/
+/.idea/
+/*.ipynb
+/test.py
+/note/.ipynb_checkpoints/
+/debug.log
+/study/KNN/ml/
+/study/KNN/cf/
+/machine_learning/big_homework/checkpoint/
+/machine_learning/big_homework/Cifar10/
