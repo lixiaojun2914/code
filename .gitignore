@@ -3,7 +3,6 @@
 /.ipynb_checkpoints/
 /.idea/
 /*.ipynb
-/test.py
 /note/.ipynb_checkpoints/
 /debug.log
 /study/KNN/ml/
@@ -11,4 +10,5 @@
 /machine_learning/big_homework/checkpoint/
 /machine_learning/big_homework/Cifar10/
 /machine_learning/big_homework/__pycache__/
-
+/test/
+/note/tensorflow笔记/.ipynb_checkpoints/
