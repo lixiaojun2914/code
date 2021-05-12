@@ -78,18 +78,21 @@ class SoftmaxWithLoss:
 
 
 class Net:
-    def __init__(self, input_size, hidden_size, output_size, weight_init_std=0.01):
+    def __init__(self, input_size, hidden1_size, hidden2_size, output_size, weight_init_std=0.01):
         self.params = {}
-        self.params['w1'] = weight_init_std * np.random.randn(input_size, hidden_size)
-        self.params['b1'] = np.zeros(hidden_size)
-        self.params['w2'] = weight_init_std * np.random.randn(hidden_size, output_size)
-        self.params['b2'] = np.zeros(output_size)
+        self.params['w1'] = weight_init_std * np.random.randn(input_size, hidden1_size)
+        self.params['b1'] = np.zeros(hidden1_size)
+        self.params['w2'] = weight_init_std * np.random.randn(hidden1_size, hidden2_size)
+        self.params['b2'] = np.zeros(hidden2_size)
+        self.params['w3'] = weight_init_std * np.random.randn(hidden2_size, output_size)
+        self.params['b3'] = np.zeros(output_size)
 
         self.layers = OrderedDict()
         self.layers['layer1'] = Linear(self.params['w1'], self.params['b1'])
         self.layers['relu1'] = Relu()
         self.layers['layer2'] = Linear(self.params['w2'], self.params['b2'])
-        # self.layers['relu2'] = Relu()
+        self.layers['relu2'] = Relu()
+        self.layers['layer3'] = Linear(self.params['w3'], self.params['b3'])
         self.last_layer = SoftmaxWithLoss()
 
     def predict(self, x):
@@ -122,6 +125,7 @@ class Net:
         grads = {}
         grads['w1'], grads['b1'] = self.layers['layer1'].dw, self.layers['layer1'].db
         grads['w2'], grads['b2'] = self.layers['layer2'].dw, self.layers['layer2'].db
+        grads['w3'], grads['b3'] = self.layers['layer3'].dw, self.layers['layer3'].db
         return grads
 
 
@@ -135,17 +139,16 @@ x_train = x_train.reshape(x_train.shape[0], -1)
 x_test = x_test.reshape(x_test.shape[0], -1)
 y_train, y_test = one_hot(y_train, 10), one_hot(y_test, 10)
 
-
 # train
 train_size = x_train.shape[0]
 iters_num = 600
-learning_rate = 0.001
+learning_rate = 0.01
 epoch = 5
 batch_size = 100
 
-net = Net(784, 50, 10)
+net = Net(784, 50, 50, 10)
 for i in range(epoch):
-    print(f'current epoch is :{i}')
+    print(f'current epoch is :{i+1}')
     for num in range(iters_num):
         batch_mask = np.random.choice(train_size, batch_size)
         x_batch = x_train[batch_mask]
@@ -153,7 +156,7 @@ for i in range(epoch):
 
         grad = net.gradient(x_batch, y_batch)
 
-        for key in ('w1', 'b1', 'w2', 'b2'):
+        for key in ('w1', 'b1', 'w2', 'b2', 'w3', 'b3'):
             net.params[key] -= learning_rate * grad[key]
 
         loss = net.loss(x_batch, y_batch)
