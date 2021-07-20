@@ -43,22 +43,23 @@ def kMeans(dataSet, k):
 
 
 
-myCentroids, clusterAssing = kMeans(x_train, 10)
+# myCentroids, clusterAssing = kMeans(x_train, 10)
 # with open('./cent.save', 'wb') as f:
 #     pickle.dump(myCentroids, f)
 # with open('./cluster.save', 'wb') as f:
 #     pickle.dump(clusterAssing, f)
-#
-#
-# with open('./cent.save', 'rb') as f:
-#     myCentroids = pickle.load(f)
-# with open('./cluster.save', 'rb') as f:
-#     clusterAssing = pickle.load(f)
-# print('done！')
 
 
-a = [np.bincount(y_train[clusterAssing[:, 0] == i]).argmax() for i in range(10)]
+with open('./cent.save', 'rb') as f:
+    myCentroids = pickle.load(f)
+with open('./cluster.save', 'rb') as f:
+    clusterAssing = pickle.load(f)
+print('done！')
+
+a = np.array([np.bincount(y_train[clusterAssing[:, 0] == i]).argmax() if len(y_train[clusterAssing[:, 0] == i]) else -1 for i in range(10)])
 print(a)
+# a = [np.bincount(y_train[clusterAssing[:, 0] == i]).argmax() for i in range(10)]
+# print(a)
 
 acc = 0
 for i in range(10):
